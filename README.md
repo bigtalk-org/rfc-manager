@@ -115,3 +115,7 @@ The tag triggers `.github/workflows/publish.yml` (Trusted Publishing → PyPI).
 ## License
 
 Apache-2.0
+
+## AI Disclosures
+
+This project has significant contributions from AI.
