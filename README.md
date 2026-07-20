@@ -1,6 +1,6 @@
 # rfcman
 
-![rfcman logo](docs/assets/rfcman-logo.png)
+<img src="docs/assets/rfcman-logo.png" width="128px" alt="Description">
 
 **rfcman** — a BigTalk utility.
 
