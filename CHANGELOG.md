@@ -1,0 +1,18 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+**rfcman** — a BigTalk utility.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.1.0] — 2026-07-21
+
+### Added
+
+- Initial `rfcman` CLI: `init`, `new idea`, `list`, `describe`, `upgrade`, `supersede`, `check`
+- UUID document ids with user-facing `Stage-filename` refs (e.g. `Idea-typed-channels`)
+- Editable body templates under `_tpls/` with locked frontmatter owned by the tool
+- Shell completion support via Typer
+- GitHub Actions CI for tests, Ruff, mypy, markdownlint, and commit message linting
