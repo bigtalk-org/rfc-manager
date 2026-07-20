@@ -87,20 +87,30 @@ After install, tab-complete:
 
 ```bash
 python -m pip install -e ".[dev]"
-ruff check .
-ruff format .
-mypy
-pytest
+make check
 ```
 
-Versioning and changelog use [Commitizen](https://commitizen-tools.github.io/commitizen/) (Conventional Commits):
+### Push commits
 
 ```bash
-cz bump
-git push && git push --tags
+make push
 ```
 
-Pushing a `v*` tag runs `.github/workflows/publish.yml` and uploads to PyPI (Trusted Publishing).
+Pushes the current branch and any local tags. Working tree must be clean.
+
+### Release to PyPI
+
+```bash
+make release
+```
+
+Runs checks, then Commitizen (`cz bump`) to:
+
+1. Choose the next SemVer from conventional commits
+2. Update `CHANGELOG.md`, `pyproject.toml`, and `__version__`
+3. Create a `v*` tag and push branch + tags
+
+The tag triggers `.github/workflows/publish.yml` (Trusted Publishing → PyPI).
 
 ## License
 
