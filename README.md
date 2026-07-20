@@ -97,7 +97,10 @@ Versioning and changelog use [Commitizen](https://commitizen-tools.github.io/com
 
 ```bash
 cz bump
+git push && git push --tags
 ```
+
+Pushing a `v*` tag runs `.github/workflows/publish.yml` and uploads to PyPI (Trusted Publishing).
 
 ## License
 
