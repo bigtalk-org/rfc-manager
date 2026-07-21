@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import warnings
 from pathlib import Path
 from typing import Annotated, NoReturn
 
@@ -34,12 +33,6 @@ from rfcman.workspace import (
     ensure_layout,
     find_root,
     write_project_file,
-)
-
-warnings.filterwarnings(
-    "ignore",
-    message="In Typer, only the parameter 'autocompletion' is supported.*",
-    category=DeprecationWarning,
 )
 
 PathOption = Annotated[
@@ -300,7 +293,7 @@ def describe_cmd(
         str | None,
         typer.Argument(
             help="RFC ref (Stage-filename, e.g. Idea-new-idea).",
-            shell_complete=complete_rfc_id,
+            autocompletion=complete_rfc_id,
         ),
     ] = None,
     path: PathOption = None,
@@ -348,7 +341,7 @@ def upgrade_cmd(
         str | None,
         typer.Argument(
             help="RFC ref to advance (Stage-filename, e.g. Idea-new-idea).",
-            shell_complete=complete_upgradeable_id,
+            autocompletion=complete_upgradeable_id,
         ),
     ] = None,
     path: PathOption = None,
@@ -461,14 +454,14 @@ def supersede_cmd(
         str | None,
         typer.Argument(
             help="Accepted RFC being replaced (Stage-filename).",
-            shell_complete=complete_accepted_id,
+            autocompletion=complete_accepted_id,
         ),
     ] = None,
     new: Annotated[
         str | None,
         typer.Argument(
             help="Accepted RFC that replaces it (Stage-filename).",
-            shell_complete=complete_accepted_id,
+            autocompletion=complete_accepted_id,
         ),
     ] = None,
     path: PathOption = None,

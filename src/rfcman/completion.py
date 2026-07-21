@@ -2,8 +2,6 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-from typer._click.shell_completion import CompletionItem
-
 from rfcman.constants import LIST_ALIASES, Stage
 from rfcman.document import Document
 from rfcman.store import documents_in_stage, format_user_ref, iter_documents, upgradeable_documents
@@ -52,19 +50,20 @@ def _match(doc: Document, incomplete: str) -> bool:
     return any(word.startswith(needle) for word in title.split())
 
 
-def _items(docs: Iterable[Document], incomplete: str) -> list[CompletionItem]:
-    out: list[CompletionItem] = []
+def _items(docs: Iterable[Document], incomplete: str) -> list[tuple[str, str]]:
+    """Return (value, help) pairs — works with Typer autocompletion across versions."""
+    out: list[tuple[str, str]] = []
     for doc in sorted(docs, key=lambda d: d.path.stem):
         if _match(doc, incomplete):
-            out.append(CompletionItem(_ref(doc), help=_help(doc)))
+            out.append((_ref(doc), _help(doc)))
     return out
 
 
-def complete_rfc_id(_ctx: object, _param: object, incomplete: str) -> list[CompletionItem]:
+def complete_rfc_id(incomplete: str) -> list[tuple[str, str]]:
     return _items(_safe_docs(), incomplete)
 
 
-def complete_upgradeable_id(_ctx: object, _param: object, incomplete: str) -> list[CompletionItem]:
+def complete_upgradeable_id(incomplete: str) -> list[tuple[str, str]]:
     try:
         root = find_root()
     except RfcRootError:
@@ -72,7 +71,7 @@ def complete_upgradeable_id(_ctx: object, _param: object, incomplete: str) -> li
     return _items(upgradeable_documents(root), incomplete)
 
 
-def complete_accepted_id(_ctx: object, _param: object, incomplete: str) -> list[CompletionItem]:
+def complete_accepted_id(incomplete: str) -> list[tuple[str, str]]:
     try:
         root = find_root()
     except RfcRootError:
