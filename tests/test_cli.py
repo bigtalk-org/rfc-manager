@@ -69,6 +69,7 @@ def test_upgrade_chain(rfcs: Path) -> None:
 
     check = runner.invoke(app, ["check"])
     assert check.exit_code == 0, check.output
+    assert "documents" in check.output
 
 
 def test_describe_idea(rfcs: Path) -> None:
@@ -101,6 +102,13 @@ def test_check_dangling_reference(rfcs: Path) -> None:
     result = runner.invoke(app, ["check"])
     assert result.exit_code == 1
     assert "dangling_reference" in result.output
+
+
+def test_check_empty_tree(rfcs: Path) -> None:
+    result = runner.invoke(app, ["check"])
+    assert result.exit_code == 0, result.output
+    assert "empty" in result.output.lower()
+    assert "consistent" not in result.output.lower()
 
 
 def test_unique_ids(rfcs: Path) -> None:

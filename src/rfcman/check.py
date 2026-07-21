@@ -14,7 +14,8 @@ class CheckIssue:
     path: Path | None = None
 
 
-def check_tree(root: Path) -> list[CheckIssue]:
+def check_tree(root: Path) -> tuple[list[CheckIssue], int]:
+    """Return (issues, document_count)."""
     issues: list[CheckIssue] = []
 
     for dirname in STAGE_DIRS.values():
@@ -29,7 +30,7 @@ def check_tree(root: Path) -> list[CheckIssue]:
         docs, by_id, by_stage_stem = load_indexes(root)
     except ValueError as exc:
         issues.append(CheckIssue("duplicate_id", str(exc)))
-        return issues
+        return issues, 0
 
     for doc in docs:
         expected_dir = STAGE_DIRS[doc.meta.type]
@@ -88,4 +89,4 @@ def check_tree(root: Path) -> list[CheckIssue]:
                     )
                 )
 
-    return issues
+    return issues, len(docs)

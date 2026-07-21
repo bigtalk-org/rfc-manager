@@ -493,9 +493,12 @@ def check_cmd(ctx: typer.Context, path: PathOption = None) -> None:
     if ctx.invoked_subcommand is not None:
         return
     root = _root_or_exit(path)
-    issues = check_tree(root)
+    issues, count = check_tree(root)
     if not issues:
-        console.print("[green]ok[/] RFC tree is consistent")
+        if count == 0:
+            console.print("[yellow]ok[/] RFC tree layout is valid, but empty (no documents)")
+        else:
+            console.print(f"[green]ok[/] RFC tree is consistent ({count} documents)")
         return
     for issue in issues:
         loc = f" ({issue.path})" if issue.path else ""
