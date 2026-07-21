@@ -97,6 +97,39 @@ def write_project_file(command_root: Path, rfc_root: Path) -> Path:
     return target
 
 
+def existing_install_paths(
+    command_root: Path,
+    rfc_root: Path,
+    *,
+    path_option: Path | None = None,
+) -> list[Path]:
+    """Paths that indicate an rfcman install already present for this init."""
+    found: list[Path] = []
+    seen: set[Path] = set()
+
+    def _add(p: Path) -> None:
+        resolved = p.resolve()
+        if resolved in seen:
+            return
+        seen.add(resolved)
+        found.append(resolved)
+
+    project = command_root.resolve() / PROJECT_FILE
+    if project.is_file():
+        _add(project)
+
+    if path_option is not None:
+        at_path = path_option.expanduser().resolve() / PROJECT_FILE
+        if at_path.is_file():
+            _add(at_path)
+
+    root = rfc_root.resolve()
+    if _looks_like_root(root):
+        _add(root)
+
+    return found
+
+
 def resolve_author(start: Path | None = None) -> str:
     """Author from rfcman.yml when set; otherwise git config."""
     project = find_project_file(start)

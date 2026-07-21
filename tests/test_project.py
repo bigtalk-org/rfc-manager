@@ -50,6 +50,15 @@ def test_path_flag_overrides_yml(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     monkeypatch.chdir(tmp_path)
     primary = tmp_path / "primary"
     secondary = tmp_path / "secondary"
+
+    class _Confirm:
+        def ask(self) -> bool:
+            return True
+
+    monkeypatch.setattr(
+        "rfcman.cli.questionary.confirm",
+        lambda *a, **k: _Confirm(),
+    )
     assert runner.invoke(app, ["init", "--path", str(primary)]).exit_code == 0
     assert runner.invoke(app, ["init", "--path", str(secondary)]).exit_code == 0
     # last init rewrote rfcman.yml → secondary; override back to primary
@@ -60,6 +69,36 @@ def test_path_flag_overrides_yml(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     assert result.exit_code == 0, result.output
     assert list((primary / "ideas").glob("*.md"))
     assert not list((secondary / "ideas").glob("*.md"))
+
+
+def test_init_prompts_before_overwrite(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.chdir(tmp_path)
+    assert runner.invoke(app, ["init"]).exit_code == 0
+
+    class _ConfirmNo:
+        def ask(self) -> bool:
+            return False
+
+    monkeypatch.setattr(
+        "rfcman.cli.questionary.confirm",
+        lambda *a, **k: _ConfirmNo(),
+    )
+    cancelled = runner.invoke(app, ["init"])
+    assert cancelled.exit_code == 1
+    assert "warning" in cancelled.output.lower() or "existing" in cancelled.output.lower()
+    assert "cancelled" in cancelled.output.lower()
+
+    class _ConfirmYes:
+        def ask(self) -> bool:
+            return True
+
+    monkeypatch.setattr(
+        "rfcman.cli.questionary.confirm",
+        lambda *a, **k: _ConfirmYes(),
+    )
+    ok = runner.invoke(app, ["init"])
+    assert ok.exit_code == 0, ok.output
+    assert "initialized" in ok.output
 
 
 def test_yml_author_used_for_new_docs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

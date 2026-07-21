@@ -31,6 +31,7 @@ from rfcman.workspace import (
     RfcRootError,
     default_rfcs_path,
     ensure_layout,
+    existing_install_paths,
     find_root,
     write_project_file,
 )
@@ -233,6 +234,19 @@ def init_cmd(
         return
     command_root = Path.cwd().resolve()
     root = path.expanduser().resolve() if path is not None else default_rfcs_path()
+    existing = existing_install_paths(command_root, root, path_option=path)
+    if existing:
+        err.print("[yellow]warning:[/] existing rfcman installation detected:")
+        for item in existing:
+            err.print(f"  {item}")
+        confirmed = questionary.confirm(
+            "Overwrite the existing installation?",
+            default=False,
+        ).ask()
+        if confirmed is None:
+            raise typer.Exit(code=1)
+        if not confirmed:
+            _fail("init cancelled")
     if root.exists() and any(root.iterdir()) and not (root / ".rfcman").exists():
         _fail(f"refusing to init into non-empty directory: {root}")
     ensure_layout(root)
