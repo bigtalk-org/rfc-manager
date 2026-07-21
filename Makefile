@@ -37,7 +37,8 @@ push:
 	git push origin --tags
 
 # Bumps SemVer from conventional commits, rewrites CHANGELOG.md, creates v* tag.
-# Pushing the tag triggers .github/workflows/publish.yml (Trusted Publishing).
+# Pushing the tag is the only release path — GitHub Actions publishes to PyPI
+# via Trusted Publishing (.github/workflows/publish.yml). Do not twine upload locally.
 release: check
 	@test -z "$$(git status --porcelain)" || { \
 		echo "error: working tree is dirty; commit or stash first"; \
@@ -47,6 +48,6 @@ release: check
 	git push origin HEAD
 	git push origin --tags
 	@echo
-	@echo "Release pushed. PyPI publish runs on the new v* tag:"
-	@echo "  https://github.com/bigtalk-org/rfc-manager/actions"
+	@echo "Release pushed. Watch Trusted Publishing here:"
+	@echo "  https://github.com/bigtalk-org/rfc-manager/actions/workflows/publish.yml"
 	@echo "  https://pypi.org/project/rfcman/"
