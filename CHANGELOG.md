@@ -52,3 +52,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Editable body templates under `_tpls/` with locked frontmatter owned by the tool
 - Shell completion support via Typer
 - GitHub Actions CI for tests, Ruff, mypy, markdownlint, and commit message linting
+
+## v0.2.0 (2026-07-21)
+
+### Feat
+
+- confirm before overwriting an existing rfcman init
+
+## v0.1.6 (2026-07-21)
+
+## v0.1.5 (2026-07-21)
+
+### Fix
+
+- report empty RFC tree clearly in check
+
+## v0.1.4 (2026-07-21)
+
+### Fix
+
+- show clean help on bare rfcman invocation
+
+## v0.1.3 (2026-07-21)
+
+### Fix
+
+- avoid private typer._click import for shell completion
+
+## v0.1.2 (2026-07-21)
+
+### Fix
+
+- size README logo for PyPI and GitHub display
+
+## v0.1.1 (2026-07-21)
+
+### Feat
+
+- add rfcman CLI for RFC lifecycle management
+
+### Fix
+
+- use absolute README logo URL for PyPI rendering
