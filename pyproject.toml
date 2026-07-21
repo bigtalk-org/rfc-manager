@@ -1,6 +1,6 @@
 [project]
 name = "rfcman"
-version = "0.1.3"
+version = "0.1.4"
 description = "rfcman — a BigTalk utility: fast CLI for managing RFC lifecycles"
 readme = "README.md"
 license = { text = "Apache-2.0" }
@@ -101,7 +101,7 @@ show_missing = true
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.1.3"
+version = "0.1.4"
 version_files = [
     "pyproject.toml:^version",
     "src/rfcman/__init__.py:^__version__",

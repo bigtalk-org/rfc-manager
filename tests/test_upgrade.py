@@ -100,7 +100,7 @@ def test_list_unknown_stage(rfcs: Path) -> None:
 def test_version() -> None:
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
-    assert "0.1.3" in result.output
+    assert "0.1.4" in result.output
 
 
 def test_init_custom_path(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:

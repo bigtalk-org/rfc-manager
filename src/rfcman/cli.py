@@ -51,7 +51,7 @@ PathOption = Annotated[
 app = typer.Typer(
     name="rfcman",
     help="\bElegant RFC lifecycle manager.\n[dim]A BigTalk utility[/]",
-    no_args_is_help=True,
+    no_args_is_help=False,
     rich_markup_mode="rich",
     context_settings={"help_option_names": ["-h", "--help"]},
 )
@@ -160,8 +160,9 @@ def _resolve_doc(root: Path, token: str, *, label: str = "RFC") -> Document:
         _fail(f"invalid {label} '{token}': {exc}")
 
 
-@app.callback()
+@app.callback(invoke_without_command=True)
 def main(
+    ctx: typer.Context,
     version: Annotated[
         bool | None,
         typer.Option(
@@ -174,6 +175,9 @@ def main(
     ] = None,
 ) -> None:
     _ = version
+    if ctx.invoked_subcommand is None:
+        console.print(ctx.get_help())
+        raise typer.Exit(0)
 
 
 @app.command("help")

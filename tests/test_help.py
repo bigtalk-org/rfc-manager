@@ -7,6 +7,14 @@ from rfcman.cli import app
 runner = CliRunner()
 
 
+def test_bare_invocation_shows_help() -> None:
+    result = runner.invoke(app, [])
+    assert result.exit_code == 0, result.output
+    assert "init" in result.output
+    assert "╭─ Error" not in result.output
+    assert "Try 'rfcman -h' for help" not in result.output
+
+
 def test_top_level_help() -> None:
     result = runner.invoke(app, ["help"])
     assert result.exit_code == 0, result.output
